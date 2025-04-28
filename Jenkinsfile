@@ -1,4 +1,4 @@
-pipeline {is 
+pipeline { 
     // Agent: Specify where the pipeline will run.
     // 'any' means Jenkins can use any available agent.
     // Make sure Docker is installed and runnable by the 'jenkins' user on this agent.
