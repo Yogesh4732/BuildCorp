@@ -19,5 +19,5 @@ app.post("/api/contact", (req, res) => {
 // Start the server
 const PORT = 5000; // You can change this port if needed
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:3000`);
 });
