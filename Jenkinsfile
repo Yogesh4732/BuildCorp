@@ -17,12 +17,28 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image for backend: ${env.IMAGE_NAME}-backend:${env.BUILD_NUMBER}"
-                    // Build backend Docker image
                     docker.build("${env.IMAGE_NAME}-backend:${env.BUILD_NUMBER}", "-f backend/Dockerfile.backend ./backend")
 
                     echo "Building Docker image for frontend: ${env.IMAGE_NAME}-frontend:${env.BUILD_NUMBER}"
-                    // Build frontend Docker image
                     docker.build("${env.IMAGE_NAME}-frontend:${env.BUILD_NUMBER}", "-f docker.frontend .")
+                }
+            }
+        }
+
+        stage('3. Push Docker Image') {
+            steps {
+                script {
+                    echo "Pushing Docker image for backend: ${env.IMAGE_NAME}-backend:${env.BUILD_NUMBER}"
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        docker.image("${env.IMAGE_NAME}-backend:${env.BUILD_NUMBER}").push()
+                        docker.image("${env.IMAGE_NAME}-backend:${env.BUILD_NUMBER}").push('latest')
+                    }
+
+                    echo "Pushing Docker image for frontend: ${env.IMAGE_NAME}-frontend:${env.BUILD_NUMBER}"
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        docker.image("${env.IMAGE_NAME}-frontend:${env.BUILD_NUMBER}").push()
+                        docker.image("${env.IMAGE_NAME}-frontend:${env.BUILD_NUMBER}").push('latest')
+                    }
                 }
             }
         }
